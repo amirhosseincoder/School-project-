@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}پنل دبیران{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block content %}
+<div class="teacher-dashboard">
+  <!-- هدر داخلی -->
+
+
+  <!-- کارت‌های امکانات -->
+  <div class="teacher-cards">
+    <div class="feature-card">
+      <div class="card-icon">📚</div>
+      <h3>آپلود فایل درسی</h3>
+      <p>بارگذاری جزوات، تمرینات و منابع آموزشی</p>
+      <button class="upload-btn" onclick="document.getElementById('uploadLessonModal').style.display='block'">آپلود فایل</button>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">📝</div>
+      <h3>آپلود مقاله</h3>
+      <p>انتشار مقالات آموزشی و پژوهشی</p>
+      <button class="upload-btn" onclick="document.getElementById('uploadArticleModal').style.display='block'">آپلود مقاله</button>
+    </div>
+    <div class="feature-card">
+      <div class="card-icon">💬</div>
+      <h3>مشاوره تحصیلی</h3>
+      <p>مدیریت جلسات مشاوره با دانش‌آموزان</p>
+      <button class="upload-btn" onclick="document.getElementById('consultationModal').style.display='block'">مدیریت مشاوره</button>
+    </div>
+  </div>
+</div>
+
+<!-- مودال آپلود فایل درسی -->
+<div id="uploadLessonModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>آپلود فایل درسی</h3>
+      <span class="close" onclick="document.getElementById('uploadLessonModal').style.display='none'">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form method="POST" action="{% url 'avisina:teacher_dashboard' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ lesson_form.non_field_errors }}
+        <div class="form-group">
+          <label for="id_title">عنوان فایل</label>
+          {{ lesson_form.title }}
+        </div>
+        <div style="display:none;">
+            {{ lesson_form.name }}
+        </div>
+        <div class="form-group">
+          <label for="id_description">توضیحات</label>
+          {{ lesson_form.description }}
+        </div>
+        <div class="form-group">
+          <label for="id_file">انتخاب فایل</label>
+          <div class="file-upload-area"> 
+            <div style="display:none;">
+            {{ lesson_form.file }}
+            </div>
+            <div class="upload-placeholder" id="lessonUploadTrigger">
+              <span class="upload-icon">📁</span>
+              <p>فایل خود را اینجا رها کنید یا کلیک کنید</p>
+              <span class="file-types">پشتیبانی از: PDF</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="submit_lesson" class="btn-submit">آپلود فایل</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- مودال آپلود مقاله -->
+<div id="uploadArticleModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>آپلود مقاله</h3>
+      <span class="close" onclick="document.getElementById('uploadArticleModal').style.display='none'">&times;</span>
+    </div>
+    <div class="modal-body">
+      <form method="POST" action="{% url 'avisina:teacher_dashboard' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ article_form.non_field_errors }}
+        <div class="form-group">
+          <label for="id_title">عنوان مقاله</label>
+          {{ article_form.title }}
+        </div>
+        <div class="form-group">
+          <label for="id_text">توضیحات</label>
+          {{ article_form.text }}
+        </div>
+        <div class="form-group">
+          <label for="id_picture">انتخاب فایل</label>
+          <div class="file-upload-area">
+            <div style="display:none;">
+            {{ article_form.picture }}
+            </div>
+            <div class="upload-placeholder" id="articleUploadTrigger">
+              <span class="upload-icon">📁</span>
+              <p>فایل خود را اینجا رها کنید یا کلیک کنید</p>
+              <span class="file-types">پشتیبانی از: PDF, Word, PowerPoint, Image</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:none;">
+            {{ article_form.writer }}
+        </div>
+        <div class="form-actions">
+          <button type="submit" name="submit_article" class="btn-submit">آپلود مقاله</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- مودال مشاوره -->
+<div id="consultationModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>مدیریت مشاوره تحصیلی</h3>
+      <span class="close" onclick="document.getElementById('consultationModal').style.display='none'">&times;</span>
+    </div>
+    <div class="modal-body">
+    
+        <div class="consultation-card">
+          <h4>👥 دانش‌آموزان</h4>
+          <p>مدیریت لیست دانش‌آموزان تحت مشاوره</p>
+          <button class="option-btn" onclick="window.location.href='{% url 'avisina:message' %}'">
+            مشاهده لیست
+        </button>
+        
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<script>
+// اتصال ظاهر سفارشی به فیلد واقعی آپلود
+function setupUpload(triggerId, inputId) {
+  const trigger = document.getElementById(triggerId);
+  const input = document.getElementById(inputId);
+
+  if (!trigger || !input) return;
+
+  trigger.addEventListener('click', () => input.click());
+
+  trigger.addEventListener('dragover', e => {
+    e.preventDefault();
+    trigger.style.background = '#f0f8ff';
+  });
+
+  trigger.addEventListener('dragleave', () => {
+    trigger.style.background = '#f8f9fa';
+  });
+
+  trigger.addEventListener('drop', e => {
+    e.preventDefault();
+    trigger.style.background = '#f8f9fa';
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      updateFileLabel(trigger, input);
+    }
+  });
+
+  input.addEventListener('change', () => updateFileLabel(trigger, input));
+}
+
+// نمایش نام فایل انتخاب‌شده
+function updateFileLabel(trigger, input) {
+  if (input.files.length > 0) {
+    trigger.innerHTML = `
+      <span class="upload-icon">✅</span>
+      <p>${input.files[0].name}</p>
+      <span class="file-types">فایل انتخاب شده</span>
+    `;
+  }
+}
+
+// راه‌اندازی آپلود برای هر فرم
+document.addEventListener('DOMContentLoaded', () => {
+  setupUpload('lessonUploadTrigger', 'lesson_file');
+  setupUpload('articleUploadTrigger', 'article_picture');
+});
+
+// بستن مودال با کلیک روی فضای بیرونی
+window.addEventListener('click', function(e) {
+  const modals = ['uploadLessonModal', 'uploadArticleModal', 'consultationModal'];
+  modals.forEach(id => {
+    const modal = document.getElementById(id);
+    if (modal && e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+});
+
+</script>
+
+{% endblock %}

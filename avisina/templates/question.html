@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}جزوه ها و نمونه سوالات درسی{% endblock %}
+{% block p %}
+دانش آموزان عزیز از اینجا میتوانند به نمونه سوالات و جزوه های درسی دسترسی داشته باشند
+{% endblock %}
+
+{% block content %}
+
+<!-- 🔹 بخش نمونه سوالات -->
+<section class="sample-section">
+
+  <!-- 🔍 باکس جست‌وجو -->
+  <input
+    type="text"
+    id="searchInput"
+    placeholder="جست‌وجو در عنوان..."
+    class="search-box"
+  >
+
+  <br><br>
+
+  <!-- 🧩 لیست نمونه سوالات -->
+  <div class="sample-grid" id="sampleGrid">
+    {% for item in pdf %}
+    <div class="sample-card">
+      <div class="pdf-icon">📘</div>
+
+      <!-- عنوان اصلی (همان توضیح فایل) -->
+      <h3 class="sample-title">{{ item.description }}</h3>
+
+      <a href="{{ item.file.url }}" download class="download-btn">دانلود فایل</a>
+    </div>
+    {% empty %}
+    <p class="no-results">هیچ نمونه سؤالی یافت نشد.</p>
+    {% endfor %}
+  </div>
+
+</section>
+
+<!-- 🧠 اسکریپت جست‌وجوی زنده (بدون خطا) -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchInput = document.getElementById("searchInput");
+  const sampleCards = document.querySelectorAll(".sample-card");
+
+  searchInput.addEventListener("keyup", function () {
+    const searchValue = this.value.toLowerCase().trim();
+
+    sampleCards.forEach(card => {
+      const title = card.querySelector(".sample-title").textContent.toLowerCase();
+
+      if (title.includes(searchValue)) {
+        card.style.display = "flex";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+});
+</script>
+
+{% endblock %}

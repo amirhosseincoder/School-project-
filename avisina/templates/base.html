@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>دبیرستان هیات امنای ابن سینا</title>
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+
+  <!-- 🔹 هدر -->
+  <header class="main-header">
+    <div class="header-left">
+      <div class="logo">🏫 دبیرستان ابن سینا</div>
+      <div class="login-buttons">
+        <a href="{% url 'avisina:login' %}" class="btn-teacher">ورود</a>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'avisina:home' %}">خانه</a></li>
+        <li><a href="{% url 'avisina:about' %}">درباره ما</a></li>
+        <li><a href="{% url 'avisina:questions' %}">نمونه سؤالات</a></li>
+        <li><a href="{% url 'avisina:student' %}">مشاوره</a></li>
+
+        {% else %}
+        <li><a href="{% url 'avisina:home' %}">خانه</a></li>
+        <li><a href="{% url 'avisina:home' %}">درباره ما</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 🔹 پیام‌های سایت -->
+  {% if messages %}
+    {% for message in messages %}
+        <div class="site-message" id="siteMessage">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <section class="intro">
+    <h1>{% block title %} دیبرستان متوسطه دوم ابن سینا{% endblock %}</h1>
+    <p>{% block p %} دیبرستان متوسطه دوم ابن سینا با سابقه فراوان در حوزه آموزش و خدمات در سطح شهر {% endblock %}</p>
+  </section>
+
+  {% block content %}{% endblock %}
+
+  <!-- 🔹 فوتر -->
+  <footer class="main-footer" id="contact">
+    <div class="footer-main">
+      <p>© تمامی حقوق محفوظ است - دبیرستان متوسطه دوم ابن سینا</p>
+      <p>راه‌های ارتباطی: ایمیل | تلفن | شبکه‌های اجتماعی</p>
+    </div>
+    <div class="footer-bottom">
+      <p>طراحی و تولید</p>
+    </div>
+  </footer>
+
+  <!-- 🔹 اسکریپت اسلایدشو و پیام -->
+  <script>
+    // پیام سایت بعد از ۵ ثانیه مخفی شود
+    window.addEventListener('DOMContentLoaded', () => {
+      const msg = document.getElementById('siteMessage');
+      if (msg) {
+        setTimeout(() => {
+          msg.classList.add('hide');
+        }, 5000);
+      }
+    });
+
+    // اسلایدشو
+    let slideIndex = 1;
+    let autoSlide;
+
+    function showSlides(n) {
+      const slides = document.querySelectorAll(".slide");
+      const bars = document.querySelectorAll(".bar");
+
+      if (n > slides.length) slideIndex = 1;
+      if (n < 1) slideIndex = slides.length;
+
+      slides.forEach(s => s.classList.remove("active"));
+      bars.forEach(b => b.style.opacity = "0.6");
+
+      slides[slideIndex - 1].classList.add("active");
+      bars[slideIndex - 1].style.opacity = "1";
+    }
+
+    function changeSlide(n) {
+      clearTimeout(autoSlide);
+      showSlides(slideIndex += n);
+      autoSlide = setTimeout(() => changeSlide(1), 4000);
+    }
+
+    function currentSlide(n) {
+      clearTimeout(autoSlide);
+      showSlides(slideIndex = n);
+      autoSlide = setTimeout(() => changeSlide(1), 4000);
+    }
+
+    function autoPlay() {
+      autoSlide = setTimeout(() => {
+        changeSlide(1);
+        autoPlay();
+      }, 4000);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      showSlides(slideIndex);
+      autoPlay();
+    });
+  </script>
+
+</body>
+</html>

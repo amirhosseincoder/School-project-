@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}ورود کاربر{% endblock %}
+{% block p %}کاربر گرامی جهت دستیابی به اطلاعات بیشتر نسبت به نام کاربری و رمز عبوری که از طرف مدرسه دریافت کردید وارد شوید{% endblock %}
+{% block content %}
+<section class="login-section">
+    <div class="login-box">
+        <h2>ورود به حساب کاربری</h2>
+        <form method="post" action="#!">
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="username">نام کاربری</label>
+                <input type="text" id="username" name="username" placeholder="نام کاربری خود را وارد کنید">
+            </div>
+
+            <div class="input-group">
+                <label for="password">رمز عبور</label>
+                <input type="password" id="password" name="password" placeholder="رمز عبور خود را وارد کنید">
+            </div>
+
+            <button type="submit" class="login-btn">ورود</button>
+
+            {% if khata %}
+                <div class="message-box">
+
+                        <p class="error-msg">{{khata}}</p>
+
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</section>
+{% endblock %}

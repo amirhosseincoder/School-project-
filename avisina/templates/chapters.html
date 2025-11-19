@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section class="news-articles">
+    <h2>اخبار و مقالات</h2>
+    <div class="articles-grid">
+      <article class="news-card">
+        <img src="{% static 'images/news1.jpg' %}" alt="خبر اول" class="news-image">
+        <h3>عنوان خبر اول</h3>
+        <p>خلاصه‌ای از خبر یا مقاله...</p>
+        <a href="#" class="btn">ادامه مطلب</a>
+      </article>
+      <article class="news-card">
+        <img src="{% static 'images/news2.jpg' %}" alt="خبر دوم" class="news-image">
+        <h3>عنوان خبر دوم</h3>
+        <p>خلاصه‌ای از خبر یا مقاله...</p>
+        <a href="#" class="btn">ادامه مطلب</a>
+      </article>
+      <article class="news-card">
+        <img src="{% static 'images/news3.jpg' %}" alt="خبر سوم" class="news-image">
+        <h3>عنوان خبر سوم</h3>
+        <p>خلاصه‌ای از خبر یا مقاله...</p>
+        <a href="#" class="btn">ادامه مطلب</a>
+      </article>
+    </div>
+
+    <!-- 🔹 دکمه مشاهده بیشتر -->
+    <div class="see-more">
+      <a href="/articles" class="btn-more">مشاهدهٔ همهٔ مقالات</a>
+    </div>
+  </section>

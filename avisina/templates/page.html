@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="simple-article">
+    <!-- هدر ساده -->
+    <header class="article-header-simple">
+        <a href="{% url 'avisina:home' %}" class="back-link">← بازگشت</a>
+        <h1>{{text.title}}</h1>
+        <div class="article-info">
+            <div class="teacher-info">
+                <img src="{% static 'images/teacher.jpg' %}" alt="معلم">
+                <div>
+                    <span>نویسنده</span>
+                    <strong>{{text.writer}}</strong>
+                    
+                </div>
+            </div>
+            <div class="article-meta">
+                <span>نوشته شده در تاریخ</span>
+                <span>{{date}}</span>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- تصویر مقاله -->
+    <div class="article-image-simple">
+        <img src="{{ text.picture.url }}" alt="مقاله">
+    </div>
+
+    <!-- محتوای مقاله -->
+    <div class="article-content-simple">
+
+
+        <h2>نوشته... </h2>
+        <p>{{text.text}}</p>
+
+    </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}پنل مشاور{% endblock %}
+
+{% block content %}
+<div class="counselor-dashboard">
+
+  <!-- 🧭 هدر -->
+  <div class="counselor-header">
+    <h1>پنل مدیریت مشاور</h1>
+    <p>لیست دانش‌آموزان ثبت‌نام شده</p>
+  </div>
+
+  <!-- 📋 لیست دانش‌آموزان -->
+  <div class="requests-list">
+    {% for student in mess %}
+    <div class="request-card">
+      <div class="request-header">
+        <div class="student-info">
+          <h3>{{ student.first_name }} {{ student.last_name }}</h3>
+          <span class="student-grade">
+            کلاس: {{ student.class_name.grade }} {{ student.class_name.name }}
+          </span>
+        </div>
+        <div class="request-meta">
+          <span class="request-date">شماره تماس: {{ student.phone }}</span>
+        </div>
+      </div>
+
+      <div class="request-details">
+        <div class="detail-item">
+          <label>توضیحات:</label>
+          <p class="description">{{ student.description|default:"—" }}</p>
+        </div>
+      </div>
+
+      <div class="request-actions">
+        <hr>
+      </div>
+    </div>
+    {% empty %}
+    <div class="no-requests">
+      <p>هیچ دانش‌آموزی ثبت نشده است.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- 🪟 مودال جزئیات -->
+<div id="detailsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>جزئیات دانش‌آموز</h3>
+      <span class="close" onclick="closeModal()">&times;</span>
+    </div>
+    <div class="modal-body" id="modalContent">
+      <!-- محتوای مودال به‌صورت داینامیک پر می‌شود -->
+    </div>
+  </div>
+</div>
+
+<script>
+function viewDetails(studentId) {
+  fetch(`/students/${studentId}/details/`)
+    .then(response => response.text())
+    .then(html => {
+      document.getElementById('modalContent').innerHTML = html;
+      document.getElementById('detailsModal').style.display = 'block';
+    });
+}
+
+function deleteStudent(studentId) {
+  if (confirm('آیا از حذف این دانش‌آموز مطمئن هستید؟')) {
+    fetch(`/students/${studentId}/delete/`, {
+      method: 'DELETE',
+      headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+    }).then(response => {
+      if (response.ok) {
+        location.reload();
+      }
+    });
+  }
+}
+
+function closeModal() {
+  document.getElementById('detailsModal').style.display = 'none';
+}
+</script>
+{% endblock %}

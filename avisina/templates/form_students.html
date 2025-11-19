@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}ثبت درخواست مشاوره{% endblock %}
+{% block p %}دانش آموز گرامی جهت ثبت و درخواست مشاوره فرم زیر را کامل و با دقت کامل نماید{% endblock %}
+{% block content %}
+<!-- 🔹 بخش ثبت‌نام دانش‌آموز -->
+<section class="student-form-section">
+    <div class="form-container">
+      <h2>فرم ثبت‌نام دانش‌آموز</h2>
+  
+      <form id="studentForm" method="POST" action="{% url 'avisina:student' %}">
+        {% csrf_token %}
+  
+        <!-- مرحله ۱: مشخصات -->
+        <div class="form-step active">
+          <label for="first_name">نام:</label>
+          <input type="text" name="first_name" id="first_name" placeholder="نام دانش‌آموز" required>
+  
+          <label for="last_name">نام خانوادگی:</label>
+          <input type="text" name="last_name" id="last_name" placeholder="نام خانوادگی" required>
+  
+          <div class="btn-group">
+            <button type="button" class="btn next">بعدی</button>
+          </div>
+        </div>
+  
+        <!-- مرحله ۲: تماس و کلاس -->
+        <div class="form-step">
+          <label for="phone">شماره تماس:</label>
+          <input type="text" name="phone" id="phone" placeholder="مثلاً 09123456789" maxlength="11" required>
+  
+          <label for="class_name">کلاس:</label>
+          <select name="class_name" id="class_name" required>
+            <option value="">انتخاب کلاس...</option>
+            {% for c in classes %}
+            <option value="{{ c.id }}">{{ c.grade }}</option>
+            {% endfor %}
+          </select>
+  
+          <div class="btn-group">
+            <button type="button" class="btn prev">قبلی</button>
+            <button type="button" class="btn next">بعدی</button>
+          </div>
+        </div>
+  
+        <!-- مرحله ۳: توضیحات -->
+        <div class="form-step">
+          <label for="description">توضیحات:</label>
+          <textarea name="description" id="description" placeholder=" دانش‌آموز عزیز لطفا پیام خودرا کامل بنویسید..."></textarea>
+  
+          <div class="btn-group">
+            <button type="button" class="btn prev">قبلی</button>
+            <button type="submit" class="btn">ثبت نهایی</button>
+          </div>
+        </div>
+  
+      </form>
+    </div>
+  
+    <script>
+      const steps = document.querySelectorAll('.form-step');
+      const nextBtns = document.querySelectorAll('.next');
+      const prevBtns = document.querySelectorAll('.prev');
+      let currentStep = 0;
+  
+      nextBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          steps[currentStep].classList.remove('active');
+          currentStep++;
+          steps[currentStep].classList.add('active');
+        });
+      });
+  
+      prevBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          steps[currentStep].classList.remove('active');
+          currentStep--;
+          steps[currentStep].classList.add('active');
+        });
+      });
+    </script>
+  </section>
+  {% endblock %}
+  

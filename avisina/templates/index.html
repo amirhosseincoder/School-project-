@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+  <!-- 🔹 معرفی مدرسه -->
+  <!-- 🔹 معرفی مدرسه -->
+
+
+ <!-- 🖼️ اسلایدشو -->
+<section class="slideshow">
+  <div class="slides">
+    <div class="slide fade active">
+      <img src="{% static 'images/slide1.jpg' %}" alt="تصویر اول">
+    </div>
+    <div class="slide fade">
+      <img src="{% static 'images/slide2.jpg' %}" alt="تصویر دوم">
+    </div>
+    <div class="slide fade">
+      <img src="{% static 'images/slide3.jpg' %}" alt="تصویر سوم">
+    </div>
+    
+  </div>
+
+  <!-- نقاط پایین اسلاید -->
+  <div class="navigation">
+    <span class="bar" onclick="currentSlide(1)"></span>
+    <span class="bar" onclick="currentSlide(2)"></span>
+    <span class="bar" onclick="currentSlide(3)"></span>
+  </div>
+</section>
+
+<!-- بنرهای انگیزشی (جدا از اسلایدشو) -->
+<section class="motivational-banners">
+  <div class="banner">
+    <div class="banner-image">
+      <img src="{% static 'images/banner1.jpg' %}" alt="بنر اول">
+    </div>
+    <div class="banner-text">
+      <h2>هر روز یک فرصت جدید است!</h2>
+      <p>بیایید با تلاش و انگیزه هر روز خود را بهتر کنیم و به اهدافمان نزدیک‌تر شویم.</p>
+    </div>
+  </div>
+
+  <div class="banner reverse">
+    <div class="banner-image">
+      <img src="{% static 'images/banner2.jpg' %}" alt="بنر دوم">
+    </div>
+    <div class="banner-text">
+      <h2>علم، کلید آینده است!</h2>
+      <p>با یادگیری و تمرین مداوم، می‌توانیم به موفقیت‌های بزرگ دست پیدا کنیم.</p>
+    </div>
+  </div>
+</section>
+
+  <!-- 🔹 اخبار و مقالات -->
+<section class="news-articles">
+  <h2>اخبار و مقالات</h2>
+
+  <div class="articles-grid">
+    {% for item in chap %}
+      <article class="news-card">
+        <div class="image-wrapper">
+          <img src="{{ item.picture.url }}" alt="{{ item.title }}" loading="lazy" class="news-image">
+        </div>
+        <h3>{{ item.title }}</h3>
+        <p>برای مشاهده کلیک کن</p>
+        <a href="{% url 'avisina:blog_detail' item.id %}" class="btn">ادامه مطلب</a>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+  {% endblock %}
+
+  
